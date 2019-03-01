@@ -31,8 +31,13 @@ jobs:
       - run: yarn build
 
       - run:
-            name: Show current files
-            command: ls
+            name: Install aws cli
+            command:
+                sudo apt-get -y -qq install awscli
+        # Deploy to the S3 bucket corresponding to the current branch
+      - run:
+            name: Deploy to S3
+            command: aws s3 sync build/ s3://babads
 
       - save_cache:
           paths:
@@ -61,24 +66,14 @@ jobs:
         - restore_cache:
             key: v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
         # Install AWS cli
-        - run:
-            name: Install aws cli
-            command:
-                sudo apt-get -y -qq install awscli
-        # Deploy to the S3 bucket corresponding to the current branch
-        - run:
-            name: Deploy to S3
-            command: aws s3 sync build/ s3://babad
+        
 
 workflows:
   version: 2
   # The build and deploy workflow
   build_and_deploy:
     jobs:
-      - build
-      - deploy:
-          requires:
-            - build
+      - build:
           filters:
               branches:
                 only:
