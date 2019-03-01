@@ -47,6 +47,8 @@ jobs:
     docker:
         - image: circleci/node:8.10.0
     steps:
+        - checkout
+
         # Log the current branch
         - run:
             name: Show current branch
