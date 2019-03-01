@@ -30,6 +30,10 @@ jobs:
 
       - run: yarn build
 
+      - run:
+            name: Show current files
+            command: ls
+
       - save_cache:
           paths:
             - node_modules
@@ -47,6 +51,9 @@ jobs:
         - run:
             name: Show current branch
             command: echo ${CIRCLE_BRANCH}
+        - run:
+            name: Show current files
+            command: ls
         # Restore cache from the build job which contains the
         # dist folder that needs to be deployed
         - restore_cache:
